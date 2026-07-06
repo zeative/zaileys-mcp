@@ -1,0 +1,34 @@
+# zaileys-mcp
+
+> Model Context Protocol (MCP) server that lets AI agents (Claude, Cursor, any MCP client) drive WhatsApp — send messages/media/polls/locations, read chats and history, manage groups, communities, newsletters, contacts, presence, and profile. Powered by Zaileys (unofficial WhatsApp Web API); QR/pairing auth, reconnection, and sessions handled automatically.
+
+Key facts:
+
+- Package: `zaileys-mcp` on npm. Peer dependency: `zaileys` >= 4.7. Node.js 20+, ESM. Bin: `zaileys-mcp` (run via `npx -y zaileys-mcp`).
+- Transport: stdio (JSON-RPC on stdout; all human output including the QR goes to stderr so the MCP channel stays clean). Custom HTTP/SSE transport via `createMcpServer` + `server.connect(transport)`.
+- Two ways to run: (1) standalone `npx zaileys-mcp` for Claude Desktop / Cursor MCP config; (2) embedded `await serveMcp(client)` — one line, reuses an existing Zaileys client's live session, no second auth.
+- 60+ tools, 1:1 with the Zaileys API. Every `to`/`chat`/`target`/`jid` argument accepts a phone number OR a JID interchangeably.
+- SMART STRATEGY — progressive tool disclosure (default `tools: 'progressive'`): only ~13 core tools stay active in the agent's context; the rest are registered disabled and revealed on demand via the `find_tools` meta-tool, which enables matches and fires MCP `notifications/tools/list_changed`. Keeps context small while exposing all 60+ tools. Alternatives: `full` (all active), `core` (locked minimal, no discovery), or an explicit string[] of tool names (+ find_tools).
+- Core always-active tools: me, check_number, list_chats, get_messages, get_profile, send_text, send_media, send_location, react, chat_mark_read, send_typing, group_metadata, find_tools.
+- Config (env for standalone / options for embedded): ZAILEYS_SESSION (default 'mcp'), ZAILEYS_AUTH_TYPE (qr|pairing), ZAILEYS_PHONE, ZAILEYS_READONLY (true = only read tools registered), ZAILEYS_ALLOWLIST (comma numbers/JIDs; outbound tools refuse others), ZAILEYS_TOOLS (progressive|full|core|comma-list).
+- Safety: unofficial WhatsApp API — accounts risk suspension; an agent with full tools can message anyone. readOnly mode omits all write tools entirely; allowlist restricts outbound recipients (read tools unaffected). Auth persists under ./.zaileys/auth/<session> — treat as a credential.
+- Tool categories: messaging (send/edit/delete/forward/pin/react), chats (list/get/archive/pin/mute/mark-read/delete/clear/disappearing), account & contacts (me/check_number/get_profile/save/remove), presence (typing/recording/online), groups (full admin surface), communities, newsletters/channels, privacy (block/blocklist), profile, business catalog.
+
+## Docs
+
+- [Introduction](https://zeative.github.io/zaileys-mcp/): Overview, what it does, two run modes
+- [Getting Started](https://zeative.github.io/zaileys-mcp/getting-started/): Claude Desktop / Cursor config, QR/pairing auth
+- [Configuration](https://zeative.github.io/zaileys-mcp/configuration/): Env vars, options, read-only, allowlist, tool strategy
+- [Tools](https://zeative.github.io/zaileys-mcp/tools/): Full 60+ tool catalog by category
+- [Tool Strategy](https://zeative.github.io/zaileys-mcp/tool-strategy/): Progressive disclosure via find_tools explained
+- [Embed in your bot](https://zeative.github.io/zaileys-mcp/embed/): serveMcp / createMcpServer, custom transport
+- [Safety](https://zeative.github.io/zaileys-mcp/safety/): Account risk, read-only, allowlist, least privilege
+- [Troubleshooting](https://zeative.github.io/zaileys-mcp/troubleshooting/): QR, list_changed support, session resets
+
+## Optional
+
+- [Full docs dump](https://zeative.github.io/zaileys-mcp/llms-full.txt)
+- [Zaileys documentation](https://zeative.github.io/zaileys/): the WhatsApp engine underneath
+- [Model Context Protocol](https://modelcontextprotocol.io)
+- [GitHub](https://github.com/zeative/zaileys-mcp)
+- [npm](https://www.npmjs.com/package/zaileys-mcp)

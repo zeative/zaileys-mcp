@@ -1,0 +1,61 @@
+# Embed in your bot
+
+> Source: https://zeative.github.io/zaileys-mcp/embed
+
+# Embed in your bot
+
+Already running a Zaileys client? Expose it to AI agents in **one line**. It reuses your live session — no separate authentication, no second QR.
+
+```typescript
+
+const client = new Client()
+await serveMcp(client) // AI agents can now drive this WhatsApp over stdio
+```
+
+`serveMcp` returns a handle:
+
+```typescript
+const { server, close } = await serveMcp(client, { readOnly: true })
+// …later
+await close()
+```
+
+## Options
+
+`serveMcp(client, options)` takes every [configuration option](/configuration) plus an optional `transport`:
+
+```typescript
+await serveMcp(client, {
+  tools: 'progressive',              // strategy (default)
+  readOnly: false,
+  allowlist: ['6281111111111'],
+  name: 'my-whatsapp',
+})
+```
+
+## Custom transport (HTTP / SSE)
+
+`serveMcp` defaults to stdio. For an HTTP or SSE transport, build the server with `createMcpServer` and connect your own:
+
+```typescript
+
+const server = createMcpServer(client, { readOnly: true })
+const transport = new StreamableHTTPServerTransport({ /* … */ })
+await server.connect(transport)
+```
+
+`createMcpServer` returns a standard MCP `McpServer`. Anything the [MCP TypeScript SDK](https://github.com/modelcontextprotocol/typescript-sdk) supports — multiple transports, sessions, auth middleware — works on top of it.
+
+## Why embed instead of standalone?
+
+- **One session** — your bot and the AI tools share the same WhatsApp connection; no double-login, no session conflicts.
+- **Live state** — the agent reads the same message store your bot writes to, so `get_messages` sees everything your bot has seen.
+- **Coexist** — your event handlers (`client.on('message', …)`) keep running while agents drive the account through MCP.
+
+## API
+
+| Export | Signature |
+| --- | --- |
+| `serveMcp` | `(client, options?) => Promise<{ server, close }>` |
+| `createMcpServer` | `(client, options?) => McpServer` |
+| `McpOptions` | the options type |

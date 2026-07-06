@@ -1,0 +1,127 @@
+# Tools
+
+> Source: https://zeative.github.io/zaileys-mcp/tools
+
+# Tools
+
+zaileys-mcp exposes **60+ tools**, a 1:1 mapping of the Zaileys API. Under the default [`progressive`](/tool-strategy) strategy only the **core** set (marked ⭐) is active up front; the rest are one `find_tools` call away.
+
+Every `to` / `chat` / `target` / `jid` argument accepts a **phone number or a JID** interchangeably — `"6281234567890"` and `"6281234567890@s.whatsapp.net"` both work.
+
+## Account & contacts
+
+| Tool | Description |
+| --- | --- |
+| `me` ⭐ | Connected account (jid, number, name) |
+| `connection_status` ⭐ | Connection state (connected/connecting/disconnected) + active account |
+| `connect` | Open the connection with the saved session (never clears it) |
+| `reconnect` | Close and reopen the socket; session preserved |
+| `check_number` ⭐ | Check if numbers are on WhatsApp |
+| `get_profile` ⭐ | Profile picture URL + status text |
+| `save_contact` | Save/label a contact |
+| `remove_contact` | Remove a saved contact |
+
+## Messaging
+
+| Tool | Description |
+| --- | --- |
+| `send_text` ⭐ | Send a text message (WhatsApp markup) |
+| `send_media` ⭐ | Send image/video/audio/document by URL or base64 |
+| `send_location` ⭐ | Send a location pin |
+| `react` ⭐ | React to a message (empty emoji removes) |
+| `send_poll` | Send a poll |
+| `send_contact` | Send a contact card (vCard) |
+| `send_sticker` | Send a sticker (webp/png/jpeg, animated Lottie) |
+| `edit_message` | Edit a text message you sent |
+| `delete_message` | Delete a message for everyone |
+| `forward_message` | Forward a message to another chat |
+| `pin_message` / `unpin_message` | Pin / unpin a message |
+
+## Chats
+
+| Tool | Description |
+| --- | --- |
+| `list_chats` ⭐ | List recent chats from the store |
+| `get_messages` ⭐ | Recent messages for a chat, newest first |
+| `chat_mark_read` ⭐ | Mark a chat read (blue ticks) |
+| `chat_mark_unread` | Mark a chat unread |
+| `chat_archive` / `chat_unarchive` | Archive / unarchive |
+| `chat_pin` / `chat_unpin` | Pin / unpin a chat |
+| `chat_mute` / `chat_unmute` | Mute / unmute |
+| `chat_delete` / `chat_clear` | Delete / clear a chat |
+| `set_disappearing` | Disappearing-message timer |
+
+## Presence
+
+| Tool | Description |
+| --- | --- |
+| `send_typing` ⭐ | Typing indicator |
+| `send_recording` | Recording-audio indicator |
+| `set_presence` | Global online/offline |
+
+## Groups
+
+| Tool | Description |
+| --- | --- |
+| `group_metadata` ⭐ | Subject, description, participants + admin flags |
+| `group_list` | All groups you're in |
+| `group_create` | Create a group |
+| `group_add` / `group_remove` | Add / remove members |
+| `group_promote` / `group_demote` | Promote / demote admins |
+| `group_update_subject` / `group_update_description` | Edit subject / description |
+| `group_leave` | Leave a group |
+| `group_invite_code` / `group_invite_revoke` | Get / revoke invite code |
+| `group_invite_info` / `group_invite_accept` | Preview / join by code |
+| `group_join_requests` / `group_approve_join` / `group_reject_join` | Manage join requests |
+| `group_setting` | Announce / lock settings |
+| `group_join_approval` / `group_member_add_mode` | Membership policies |
+| `group_toggle_ephemeral` | Group disappearing timer |
+
+## Communities
+
+| Tool | Description |
+| --- | --- |
+| `community_metadata` / `community_list` / `community_subgroups` | Read community info |
+| `community_create` | Create a community |
+| `community_link_group` / `community_unlink_group` | Link / unlink a group |
+| `community_leave` | Leave a community |
+
+## Newsletters (channels)
+
+| Tool | Description |
+| --- | --- |
+| `newsletter_metadata` / `newsletter_messages` | Read channel info & posts |
+| `newsletter_create` | Create a channel |
+| `newsletter_follow` / `newsletter_unfollow` | Follow / unfollow |
+| `newsletter_mute` / `newsletter_unmute` | Mute / unmute |
+| `newsletter_react` | React to a channel post |
+
+## Privacy
+
+| Tool | Description |
+| --- | --- |
+| `privacy_get` | Your privacy settings |
+| `blocklist` | List blocked contacts |
+| `block` / `unblock` | Block / unblock a contact |
+
+## Profile
+
+| Tool | Description |
+| --- | --- |
+| `set_profile_name` / `set_profile_status` | Set name / about |
+| `set_profile_picture` / `remove_profile_picture` | Set / remove picture |
+
+## Business
+
+| Tool | Description |
+| --- | --- |
+| `business_profile` | A business profile |
+| `business_catalog` / `business_collections` | Products & collections |
+
+## The meta-tool
+
+| Tool | Description |
+| --- | --- |
+| `find_tools` ⭐ | Reveal inactive tools matching a need or category (present under `progressive` and explicit-list strategies) |
+
+Under `readOnly`, every write tool above is **omitted entirely** — the agent cannot call them at all.

@@ -1,0 +1,43 @@
+# Introduction
+
+> Source: https://zeative.github.io/zaileys-mcp
+
+# Introduction
+
+**zaileys-mcp** is a [Model Context Protocol](https://modelcontextprotocol.io) server that gives AI agents — Claude, Cursor, and any MCP client — the ability to **drive WhatsApp**. Send messages, media, polls, and locations; read chats and history; manage groups, communities, newsletters, contacts, presence, and profile. It's powered by [Zaileys](https://zeative.github.io/zaileys/), so QR / pairing-code auth, reconnection, and sessions are handled for you.
+
+```json
+{
+  "mcpServers": {
+    "whatsapp": {
+      "command": "npx",
+      "args": ["-y", "zaileys-mcp"],
+      "env": { "ZAILEYS_SESSION": "my-wa" }
+    }
+  }
+}
+```
+
+Drop that in your MCP client, scan the QR once, and ask your agent: *"send a WhatsApp to +62 812… that the deploy is done"* or *"summarize the last 20 messages in my family group."*
+
+## What makes it different
+
+- **Full 1:1 with Zaileys** — 60+ tools covering messaging, chats, groups, communities, newsletters, privacy, profile, presence, contacts, and business.
+- **Progressive tool disclosure** — all 60+ tools exist, but only a small **core** stays in the agent's context. The rest are revealed on demand via a `find_tools` meta-tool, so you get full capability without bloating every request. See [Tool Strategy](/tool-strategy).
+- **Zero-config auth** — Zaileys handles the WhatsApp connection. First run prints a QR; the session persists.
+- **Embeddable** — already have a Zaileys bot? Expose it to AI agents in [one line](/embed) — it reuses your live session.
+- **Safe by design** — `read-only` mode and recipient allowlists for when an agent shouldn't have full reach. See [Safety](/safety).
+
+## Two ways to run it
+
+**Standalone** (`npx zaileys-mcp`) — a self-contained server for Claude Desktop, Cursor, or any MCP client. **Embedded** (`serveMcp(client)`) — attach MCP to a Zaileys client you already run. Both expose the same tools.
+
+## Fair warning
+
+This drives a **real WhatsApp account** through the unofficial Web API (via Zaileys/Baileys). WhatsApp may suspend numbers that use unofficial automation, and an AI agent with these tools can message anyone in your account. Use `read-only` or an allowlist when you don't need full access, and never point it at an account you can't afford to lose.
+
+## Next steps
+
+- [Getting Started](/getting-started) — install and connect your MCP client
+- [Tools](/tools) — the full tool catalog
+- [Tool Strategy](/tool-strategy) — how progressive disclosure keeps context small

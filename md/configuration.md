@@ -1,0 +1,75 @@
+# Configuration
+
+> Source: https://zeative.github.io/zaileys-mcp/configuration
+
+# Configuration
+
+zaileys-mcp is configured with **environment variables** when run standalone, or **options** when [embedded](/embed). They map one-to-one.
+
+## Environment variables (standalone)
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `ZAILEYS_SESSION` | `mcp` | Session id. Auth persists under `./.zaileys/auth/<id>`. |
+| `ZAILEYS_AUTH_TYPE` | `qr` | `qr` or `pairing`. |
+| `ZAILEYS_PHONE` | — | Phone number (E.164 digits, no `+`) for pairing-code login. |
+| `ZAILEYS_READONLY` | `false` | `true` to expose only read tools (no sending or mutations). |
+| `ZAILEYS_ALLOWLIST` | — | Comma-separated numbers/JIDs. Restricts outbound tools to these recipients. |
+| `ZAILEYS_TOOLS` | `progressive` | Tool-exposure strategy — see below. |
+
+```json
+{
+  "mcpServers": {
+    "whatsapp": {
+      "command": "npx",
+      "args": ["-y", "zaileys-mcp"],
+      "env": {
+        "ZAILEYS_SESSION": "work",
+        "ZAILEYS_READONLY": "false",
+        "ZAILEYS_ALLOWLIST": "6281111111111,6282222222222",
+        "ZAILEYS_TOOLS": "progressive"
+      }
+    }
+  }
+}
+```
+
+## Options (embedded)
+
+`serveMcp(client, options)` and `createMcpServer(client, options)` accept:
+
+| Option | Type | Description |
+| --- | --- | --- |
+| `readOnly` | `boolean` | Expose only read tools. Default `false`. |
+| `allowlist` | `string[]` | Restrict outbound tools to these numbers/JIDs. Read tools are unaffected. |
+| `tools` | `'progressive' \| 'full' \| 'core' \| string[]` | How many tools are active at once. Default `'progressive'`. |
+| `name` | `string` | Server name reported to MCP clients. Default `'zaileys'`. |
+| `version` | `string` | Server version reported to MCP clients. |
+| `transport` | `Transport` | Custom MCP transport (`serveMcp` only). Default stdio. |
+
+## Tool-exposure strategy
+
+`tools` (env `ZAILEYS_TOOLS`) controls how many of the 60+ tools are **active** — i.e. visible in the agent's context — at any moment. All tools always exist; this only changes what's exposed up front.
+
+| Value | Active tools | Discovery |
+| --- | --- | --- |
+| `progressive` *(default)* | ~13 core | Rest revealed on demand via `find_tools` |
+| `full` | all 60+ | — (everything already active) |
+| `core` | ~12 core | None (locked minimal set) |
+| `string[]` | exactly the named tools | Plus `find_tools` to reach the rest |
+
+`progressive` is the recommended default: full capability, small context. See [Tool Strategy](/tool-strategy) for how `find_tools` works. Use `full` only with clients that comfortably handle large tool lists.
+
+## Read-only and allowlist
+
+Two independent guardrails, both usable in any mode:
+
+- **`readOnly`** — write tools (send, react, edit, delete, group/profile/privacy mutations) are never registered. The agent physically cannot send.
+- **`allowlist`** — outbound tools refuse any recipient not on the list. Read tools still work everywhere.
+
+```typescript
+await serveMcp(client, { readOnly: true })                    // agent can read, never send
+await serveMcp(client, { allowlist: ['6281111111111'] })      // can only message one number
+```
+
+See [Safety](/safety) for when to use each.
