@@ -54,9 +54,9 @@ Use it for notification bots that should only ever message you or a fixed team.
 
 `readOnly` and `allowlist` are independent and stack with any [tool strategy](/tool-strategy). A monitoring agent might run `readOnly`; a personal-assistant agent might run full tools but `allowlist`-ed to your own number and a few contacts.
 
-## No destructive session tools
+## Connection tools are recoverable only
 
-By design, the agent **cannot log out, clear the session, disconnect, or force a reconnect** — those tools don't exist. An agent that could destroy its own WhatsApp session might lock itself (and you) out, requiring a fresh QR scan. The only auth-related tool is `connection_status`, which is read-only: the agent can *check* whether the session is ready before sending, but never touch it. Manage the connection lifecycle yourself (the standalone process, or your embedding code).
+The agent can check the connection (`connection_status`), and **`connect`** / **`reconnect`** to recover a stuck link — all of which preserve the saved session. What it **cannot** do is **log out or clear the session**; those tools don't exist. An agent that could destroy its own WhatsApp session might lock itself (and you) out, requiring a fresh QR scan. `reconnect` closes and reopens the socket but never touches the credentials, so it's always safe to call.
 
 ## Where the session lives
 

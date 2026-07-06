@@ -91,6 +91,15 @@ export function registerTools(server: McpServer, ctx: ToolContext): void {
       account: user?.id ? { jid: user.id, number: jidToPhone(user.id), name: user.name ?? null } : null,
     })
   })
+  write('connect', 'connection', false, 'Open the WhatsApp connection using the saved session. Safe — never clears the session; if not linked yet, a QR/pairing code is emitted to the server logs.', {}, async () => {
+    await client.connect()
+    return json({ ok: true, state: client.state })
+  })
+  write('reconnect', 'connection', false, 'Reconnect WhatsApp (close the socket, then open it again with the saved session). Safe — the session is preserved. Use when the connection is stuck.', {}, async () => {
+    await client.disconnect().catch(() => {})
+    await client.connect()
+    return json({ ok: true, state: client.state })
+  })
 
   read('me', 'account', true, 'Return the connected WhatsApp account (jid, number, name).', {}, async () => {
     const user = client.socket?.user

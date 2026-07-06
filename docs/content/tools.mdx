@@ -18,6 +18,8 @@ Every `to` / `chat` / `target` / `jid` argument accepts a **phone number or a JI
 | --- | --- |
 | `me` ⭐ | Connected account (jid, number, name) |
 | `connection_status` ⭐ | Connection state (connected/connecting/disconnected) + active account |
+| `connect` | Open the connection with the saved session (never clears it) |
+| `reconnect` | Close and reopen the socket; session preserved |
 | `check_number` ⭐ | Check if numbers are on WhatsApp |
 | `get_profile` ⭐ | Profile picture URL + status text |
 | `save_contact` | Save/label a contact |
