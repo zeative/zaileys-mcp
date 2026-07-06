@@ -1,7 +1,7 @@
 {
   "name": "zaileys-mcp",
   "description": "Model Context Protocol server for WhatsApp, powered by Zaileys — let AI agents send messages, media, polls, and read chats from your WhatsApp. Zero-config: attach to any Zaileys client in one line, or run standalone.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "MIT",
   "type": "module",
   "author": "zaadevofc",

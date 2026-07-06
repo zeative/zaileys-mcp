@@ -81,7 +81,16 @@ export function registerTools(server: McpServer, ctx: ToolContext): void {
   }
   const key = (chat: string, id: string, fromMe?: boolean) => ({ remoteJid: toJid(chat), id, fromMe: fromMe === true })
 
-  // ──────────────── account / contacts ────────────────
+  // ──────────────── connection (safe lifecycle only — no logout/session-destroy) ────────────────
+
+  read('connection_status', 'connection', true, 'Get the WhatsApp connection state (connected/connecting/disconnected) and the active account.', {}, async () => {
+    const user = client.socket?.user
+    return json({
+      state: client.state,
+      sessionId: client.sessionId,
+      account: user?.id ? { jid: user.id, number: jidToPhone(user.id), name: user.name ?? null } : null,
+    })
+  })
 
   read('me', 'account', true, 'Return the connected WhatsApp account (jid, number, name).', {}, async () => {
     const user = client.socket?.user
