@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.zaileys/
+.DS_Store
+docs/node_modules/
+docs/.next/
+docs/out/
+docs/public/md/
+docs/public/llms-full.txt

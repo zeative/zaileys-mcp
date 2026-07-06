@@ -1,0 +1,63 @@
+{
+  "name": "zaileys-mcp",
+  "description": "Model Context Protocol server for WhatsApp, powered by Zaileys — let AI agents send messages, media, polls, and read chats from your WhatsApp. Zero-config: attach to any Zaileys client in one line, or run standalone.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "author": "zaadevofc",
+  "homepage": "https://zeative.github.io/zaileys-mcp/",
+  "repository": {
+    "url": "git+https://github.com/zeative/zaileys-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zeative/zaileys-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "modelcontextprotocol",
+    "mcp-server",
+    "whatsapp",
+    "whatsapp-mcp",
+    "zaileys",
+    "baileys",
+    "ai-agent",
+    "claude",
+    "cursor",
+    "llm-tools"
+  ],
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "zaileys-mcp": "./dist/bin.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "start": "tsx src/bin.ts",
+    "prepublishOnly": "tsup"
+  },
+  "peerDependencies": {
+    "zaileys": ">=4.7.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsup": "^8.5.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "zaileys": "^4.7.0"
+  }
+}
